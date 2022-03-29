@@ -1,6 +1,7 @@
 
 
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 from flask import Flask, render_template, jsonify, request
 import requests
 # from flask_wtf import FlaskForm
@@ -31,7 +32,7 @@ current_time = now.strftime("%H:%M")
 #     return render_template('index.html')
 @app.route('/', methods=['GET'])
 def home():
-    posts_list = list(db.posts.find({}, {'_id': False}).sort('deadline', 1))
+    posts_list = list(db.posts.find({}).sort('deadline', 1))
     return render_template('index.html', posts=posts_list)
 
 # 리스트 출력하기
@@ -79,16 +80,16 @@ def register():
 
 # 상세페이지
 
-@app.route('/spec', methods=['GET'])
-def spec():
+@app.route('/spec/<objectId>', methods=['GET'])
+def spec(objectId):
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
-    id_receive = request.form['object_id_give']
+    id_receive =  objectId
 
     # 2. 해당 정보 찾기
-    post = db.posts.find_one({'_id': id_receive})
-
+    post = db.posts.find_one({'_id':ObjectId(objectId)})
+    
     # 3. 해당 정보 보냐쥬기 - id 제외하고????
-    return jsonify({'result': 'success', 'post': post})
+    return render_template('detail.html', post=post)
 
 
 # 함께하기
