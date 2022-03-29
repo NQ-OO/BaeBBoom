@@ -73,13 +73,16 @@
       }
       // console.log(business_name, min_per, time, fee, open_link);
 
-      // 통신
 
+      // 통신
       else {
+        hour = hour.padStart(2, '0');
+        minutes = minutes.padStart(2, '0');
+        let realtime = hour + minutes;
         $.ajax({
           type: "POST",
           url: "/register",
-          data: { business_name, min_per, time, fee, open_link, user_id }, // 데이터 주는방법
+          data: { business_name, min_per, realtime, fee, open_link, user_id }, // 데이터 주는방법
           success: function (response) { // 성공하면
             if (response["result"] == "success") {
               // alert(response["msg"]);

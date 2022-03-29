@@ -61,7 +61,7 @@ def register():
     # # 1. 클라이언트 데이터 받기
     shop_receive = request.form['business_name']
     min_num_receive = request.form['min_per']
-    deadline_receive = request.form['time']
+    deadline_receive = request.form['realtime']
     delivery_cost_receive = request.form['fee']
     open_url_receive = request.form['open_link']
     user_receive = request.form['user_id']  # 유저 변수에 저장
