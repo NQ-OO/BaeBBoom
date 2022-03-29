@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- TAIL WIND -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            clifford: '#da373d',
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+  </style>
+  <!-- GOOGLE FONT -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+  <!-- 한나 -->
+  <link href="https://webfontworld.github.io/BMHanna11yrs/BMHanna11yrs.css" rel="stylesheet">
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <title>배달비 뿜빠이</title>
+  <style>
+    * {
+      font-family: 'BMHanna11yrs';
+    }
+
+    body {
+      min-width: 470px;
+      min-height: 500px;
+    }
+  </style>
+  <script>
+    function onClickSignUp() {
+      let id = $("#user_id").val();
+      let pwd = $("#password").val();
+      let confirm_pwd = $("#confirm_password").val();
+      // console.log(id);
+      console.log("id :", id);
+      console.log("password :", pwd);
+      console.log("confirm_password :", pwd);
+
+      // 통신
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/signup",
+      //   data: { id, pwd, confirm_pwd }, // 데이터 주는방법
+      //   success: function (response) { // 성공하면
+      //     if (response["result"] == "success") {
+      //       alert(response["msg"]);
+      //       // 3. 성공 시 페이지 새로고침
+      //       window.location.reload()
+      //     } else {
+      //       alert("server ERROR!")
+      //     }
+      //   }
+      // })
+    }
+  </script>
+</head>
+
+<body style="background-color: rgb(43,195,190); display: flex; flex-direction: column;">
+  <div class="min-h-screen flex flex-col">
+    <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
+      <div class="py-8 rounded text-white w-full">
+        <h1 class="mb-8 text-8xl text-center" style="font-weight: 600; ">배 뿜</h1>
+        <div style="display: flex; justify-content: space-evenly; align-items: center;" class="w-full">
+          <text style="width: 56px;">아이디</text>
+          <input type="text" style="color: black;" id="user_id"
+            class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700" name="user_id" />
+        </div>
+
+        <div style="display: flex; justify-content: space-evenly; align-items: center;">
+          <text style="width: 56px;">비밀번호</text>
+          <input type="password" id="password" style="font-family: sans-serif;"
+            class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700" name="password" />
+        </div>
+
+        <div style="display: flex; justify-content: space-evenly; align-items: center;">
+          <text style="width: 56px;">비밀번호 확인</text>
+
+          <input type="password" id="confirm_password" style="font-family: sans-serif;"
+            class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700" name="confirm_password" />
+        </div>
+
+        <button type="submit" onclick="onClickSignUp()"
+          class="w-full text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-1">회원가입</button>
+
+      </div>
+
+
+    </div>
+  </div>
+</body>
+
+</html>
