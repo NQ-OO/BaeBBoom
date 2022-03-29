@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- TAIL WIND -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            clifford: '#da373d',
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+  </style>
+  <!-- 한나 -->
+  <link href="https://webfontworld.github.io/BMHanna11yrs/BMHanna11yrs.css" rel="stylesheet">
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <title>배달비 뿜빠이</title>
+  <style>
+    * {
+      font-family: 'BMHanna11yrs';
+    }
+
+    body {
+      min-width: 570px;
+      min-height: 500px;
+    }
+
+    ul {
+      list-style: none;
+    }
+  </style>
+  <script>
+    function onClickRegister() {
+
+      let business_name = $("#business_name").val();
+      let min_per = $("#min_per").val();
+      let time = $("#time").val();
+      let fee = $("#fee").val();
+      let open_link = $("#open_link").val();
+
+      let [hour, minutes] = time.split(':');
+      // console.log(minutes);
+
+      // console.log(business_name.trim(), min_per.trim(), time.trim(), fee.trim(), open_link.trim());
+      // min_per > 1
+      // time 양식 00:00
+      if (business_name.trim() == '' || min_per == '' || time.trim() == '' || fee == '' || open_link == '') {
+        alert("모두 필수사항입니다.\n 필수사항을 모두 입력해주세요.");
+      }
+      else if (min_per <= 1) {
+        alert("인원수를 제대로 입력하라옹!!!");
+        location.reload();
+      }
+
+      else if (hour > 23 || minutes >= 60 || minutes == undefined) {
+        alert("시간을 제대로 입력하라옹!!!");
+        location.reload();
+      }
+      // console.log(business_name, min_per, time, fee, open_link);
+
+      // 통신
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/bboom",
+      //   data: { business_name, min_per, time, fee, open_link }, // 데이터 주는방법
+      //   success: function (response) { // 성공하면
+      //     if (response["result"] == "success") {
+      //       alert(response["msg"]);
+      //       // 3. 성공 시 페이지 새로고침
+      //       window.location.reload()
+      //     } else {
+      //       alert("server ERROR!")
+      //     }
+      //   }
+      // })
+      else { console.log("thru"); }
+    }
+  </script>
+</head>
+
+<body style=" background-color: rgb(43,195,190); display: flex; flex-direction: column; height: 100vh;">
+  <!-- NAV BAR -->
+  <div style="display: flex; align-items: center; justify-content: space-between; position: sticky;
+  top: 0px; background-color: rgb(43,195,190);">
+
+    <div>
+      <text style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800; letter-spacing: 10px;">배뿜</text>
+      <text style="font-size:20px; color:white;">배달비를 뿜!하자</text>
+
+    </div>
+    <!-- LOGIN OR LOGOUT -->
+    <button
+      style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+      로그아웃
+    </button>
+  </div>
+
+  <!-- CREATE -->
+  <div class="flex  items-center flex-col text-white items-center my-7">
+    <div class="my-3 w-1/2 flex justify-center block items-center">
+      <text style="width:91px; text-align: right;">상호명</text>
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" id="business_name" type="text" placeholder="ex) 교촌치킨"
+        required />
+    </div>
+    <div class="my-3 w-1/2 flex justify-center block items-center">
+      <text style="width:91px; text-align: right;">최소인원</text>
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="number" id="min_per" placeholder="ex) 3" />
+    </div>
+    <div class="my-3 w-1/2 flex justify-center block items-center">
+      <text style="width:91px; text-align: right;">시간</text>
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="text" id="time" placeholder="ex) 16:30, 00:30" />
+    </div>
+    <div class="my-3 w-1/2 flex justify-center block items-center">
+      <text style="width:91px; text-align: right;">배달비</text>
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="number" id="fee" placeholder="ex) 8000" />
+    </div>
+    <div class="my-3 w-1/2 flex justify-center block items-center">
+      <text style="width:91px; text-align: right;">오픈 채팅 링크</text>
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="text" id="open_link" />
+    </div>
+    <button type="submit" onclick="onClickRegister()"
+      class="w-1/3 text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-8">등록하기</button>
+  </div>
+
+</body>
+
+</html>
