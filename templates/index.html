@@ -7,29 +7,152 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
+  <!-- TAIL WIND -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            clifford: '#da373d',
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+    }
+  </style>
+  <!-- 한나 -->
+  <link href="https://webfontworld.github.io/BMHanna11yrs/BMHanna11yrs.css" rel="stylesheet">
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
   <title>배달비 뿜빠이</title>
+  <style>
+    * {
+      font-family: 'BMHanna11yrs';
+    }
+
+    body {
+      min-width: 470px;
+      min-height: 500px;
+    }
+
+    ul {
+      list-style: none;
+    }
+  </style>
+  <script>
+    // $(document).ready(function () {
+    //             $("#cards-box").html("");
+    //             showBooms();
+    //         });
+    // function showBooms() {
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "/bbooms",
+    //     data: {},
+    //     success: function (response) {
+    //       let articles = response["articles"];
+    //       console.log(articles);
+    //     }
+    //   })
+    // }
+
+    function onClickSpec() {
+      console.log("let it go");
+    }
+    function onClickLoginBtn() {
+      window.location.href = './login';
+    }
+  </script>
 </head>
 
 <body style=" background-color: rgb(43,195,190); display: flex; flex-direction: column;">
   <!-- NAV BAR -->
-  <div style="display: flex; align-items: center; justify-content: space-between; ">
+  <div style="display: flex; align-items: center; justify-content: space-between; position: sticky;
+  top: 0px; background-color: rgb(43,195,190);">
 
     <div>
-      <text style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800;">배 뿜</text>
-      <text style="font-size:20px; color:white;">배달비 뿜</text>
+      <text style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800; letter-spacing: 10px;">배뿜</text>
+      <text style="font-size:20px; color:white;">배달비를 뿜!하자</text>
 
     </div>
     <!-- LOGIN OR LOGOUT -->
-    <button
-      style="margin-right: 40px; background-color: white; outline: 0; border:0; width:200px; height: 80px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+    <button onclick="onClickLoginBtn()"
+      style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
       LOGIN
     </button>
   </div>
 
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <button
-      style="background-color: #fff; color :black; border:white; border-radius: 50%; width: 40px; height: 40px; font-size: xx-large; font-weight: 900;">+</button>
-    <li style="background-color:white;">ddd</li>
+  <div class="flex flex-1 flex-col items-center">
+    <button class="bg-white boder rounded-full w-12 h-12 text-5xl mt-8">+</button>
+    <!-- style="background-color: #fff; color :black; border:white; border-radius: 50%; width: 40px; height: 40px; font-size: xx-large; font-weight: 900;">+</button> -->
+
+    <ul class="my-2 py-8 w-full flex items-center flex-col">
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+
+
+
+
+
+
+    </ul>
+
 
   </div>
 

@@ -46,7 +46,7 @@
     }
 
     body {
-      min-width: 470px;
+      min-width: 570px;
       min-height: 500px;
     }
   </style>
@@ -55,6 +55,23 @@
       let id = $('#user_id').val();
       let pwd = $('#password').val();
       console.log(id, pwd);
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/login",
+      //   data: { id,pwd }, // 데이터 주는방법
+      //   success: function (response) { // 성공하면
+      //     if (response["result"] == "success") {
+      //       alert(response["msg"]);
+      //       // 3. 성공 시 페이지 새로고침
+      //       window.location.href = './';
+      //     } else {
+      //       alert("server ERROR!")
+      //     }
+      //   }
+      // })
+    }
+    function onClickSignUpBtn() {
+      window.location.href = './signup';
     }
   </script>
 </head>
@@ -79,7 +96,7 @@
         <button type="submit" onclick="onClickLogin()"
           class="w-full text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-1">로그인
         </button>
-        <button type="submit"
+        <button type="submit" onclick="onClickSignUpBtn()"
           class="w-full text-center py-3 rounded bg-white text-black hover:bg-green-dark focus:outline-none my-1">회원가입
         </button>
       </div>
