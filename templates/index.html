@@ -20,13 +20,7 @@
       }
     }
   </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
   <!-- 한나 -->
   <link href="https://webfontworld.github.io/BMHanna11yrs/BMHanna11yrs.css" rel="stylesheet">
   <!-- JS -->
@@ -54,26 +48,31 @@
   </style>
   <script>
     // $(document).ready(function () {
-    //             $("#cards-box").html("");
-    //             showBooms();
-    //         });
-    // function showBooms() {
+    //   showOrders();
+    // });
+    // function showOrders() {
     //   $.ajax({
     //     type: "GET",
-    //     url: "/bbooms",
+    //     url: "/list",
+    //     // async: false,
     //     data: {},
     //     success: function (response) {
-    //       let articles = response["articles"];
-    //       console.log(articles);
+    //       let posts = response["posts"];
+    //       console.log(response);
+
     //     }
     //   })
+
     // }
 
     function onClickSpec() {
       console.log("let it go");
     }
     function onClickLoginBtn() {
-      window.location.href = './login';
+      window.location.href = './signin';
+    }
+    function onClickPlusBtn() {
+      window.location.href = './register';
     }
   </script>
 </head>
@@ -96,63 +95,25 @@
   </div>
 
   <div class="flex flex-1 flex-col items-center">
-    <button class="bg-white boder rounded-full w-12 h-12 text-5xl mt-8">+</button>
+    <button class="bg-white boder rounded-full w-12 h-12 text-5xl mt-8" onclick="onClickPlusBtn()">+</button>
     <!-- style="background-color: #fff; color :black; border:white; border-radius: 50%; width: 40px; height: 40px; font-size: xx-large; font-weight: 900;">+</button> -->
 
     <ul class="my-2 py-8 w-full flex items-center flex-col">
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
-      <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
-        <button onclick="onClickSpec()">
-          함께하기
-        </button>
-      </li>
 
-
-
-
-
-
+      <!-- <li class="bg-white my-4 w-1/2 block p-6 rounded">상호명 00:00시까지 예약받음 인원:3/4
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li> -->
+      {% for post in posts %}
+      <li class="bg-white my-4 w-1/2 block p-6 rounded" id={{post._id}}>{{post.shop}} {{post.deadline}}시까지 예약받음
+        인원:{{post.user_list|length}}/{{post.min_num}}
+        <button onclick="onClickSpec()">
+          함께하기
+        </button>
+      </li>
+      {% endfor %}
     </ul>
-
 
   </div>
 
