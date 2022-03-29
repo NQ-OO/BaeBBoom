@@ -1,9 +1,22 @@
+
+
+
+
+from flask import Flask, render_template , jsonify, request
+# from flask_wtf import FlaskForm
+from flask_wtf.csrf import CSRFProtect 
+from forms import SignupForm
 from asyncio.windows_events import NULL
 from pickle import GET
 from unittest import result
 from datetime import datetime
-from flask import Flask, render_template, jsonify, request
+# from wtforms import StringField, submitField
+# from wtforms.validators import DataRequired
+
+
+
 app = Flask(__name__)
+print(app.config)
 
 from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
@@ -15,7 +28,6 @@ current_time = now.strftime("%H:%M")
 # 메인페이지
 @app.route('/')
 def home():
-
   return render_template('index.html')
 
 # 리스트 출력하기
@@ -90,7 +102,7 @@ def together():
 # 로그인 페이지
 
 
-@app.route('/login')
+@app.route('/signin')
 def login():
     return 'This is 로그인페이지!'
 
@@ -99,8 +111,26 @@ def login():
 
 @app.route('/signup')
 def signup():
-    return 'This is 회원가입페이지!'
+
+    return render_template('signup.html')
+
 
 
 if __name__ == '__main__':
+    app.config['SECRET_KEY'] = "secret_key"
+    csrf = CSRFProtect()
+    csrf.init_app(app)
+    
+    
     app.run('0.0.0.0', port=5000, debug=True)
+
+
+#Invalid URL
+@app.errorhandler(404) 
+def page_not_found(e):
+  return render_template("404.html"), 404
+
+
+
+    
+  
