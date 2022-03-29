@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
   <meta charset="UTF-8">
@@ -17,13 +17,7 @@
       }
     }
   </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
   <!-- 한나 -->
   <link href="https://webfontworld.github.io/BMHanna11yrs/BMHanna11yrs.css" rel="stylesheet">
   <!-- JS -->
@@ -50,18 +44,19 @@
     }
   </style>
   <script>
-    function onClickRegister() {
+    function onClickRegister(e) {
+      e.preventDefault();
 
       let business_name = $("#business_name").val();
       let min_per = $("#min_per").val();
       let time = $("#time").val();
       let fee = $("#fee").val();
       let open_link = $("#open_link").val();
-
+      let user_id = 'Turkey';
       let [hour, minutes] = time.split(':');
       // console.log(minutes);
 
-      // console.log(business_name.trim(), min_per.trim(), time.trim(), fee.trim(), open_link.trim());
+      console.log(business_name.trim(), min_per.trim(), time.trim(), fee.trim(), open_link.trim());
       // min_per > 1
       // time 양식 00:00
       if (business_name.trim() == '' || min_per == '' || time.trim() == '' || fee == '' || open_link == '') {
@@ -69,31 +64,34 @@
       }
       else if (min_per <= 1) {
         alert("인원수를 제대로 입력하라옹!!!");
-        location.reload();
+        // location.reload();
       }
 
       else if (hour > 23 || minutes >= 60 || minutes == undefined) {
         alert("시간을 제대로 입력하라옹!!!");
-        location.reload();
+        // location.reload();
       }
       // console.log(business_name, min_per, time, fee, open_link);
 
       // 통신
-      // $.ajax({
-      //   type: "POST",
-      //   url: "/bboom",
-      //   data: { business_name, min_per, time, fee, open_link }, // 데이터 주는방법
-      //   success: function (response) { // 성공하면
-      //     if (response["result"] == "success") {
-      //       alert(response["msg"]);
-      //       // 3. 성공 시 페이지 새로고침
-      //       window.location.reload()
-      //     } else {
-      //       alert("server ERROR!")
-      //     }
-      //   }
-      // })
-      else { console.log("thru"); }
+
+      else {
+        $.ajax({
+          type: "POST",
+          url: "/register",
+          data: { business_name, min_per, time, fee, open_link, user_id }, // 데이터 주는방법
+          success: function (response) { // 성공하면
+            if (response["result"] == "success") {
+              // alert(response["msg"]);
+              // 3. 성공 시 페이지 새로고침
+              alert("등록완료!");
+              window.location.href = './';
+            } else {
+              alert("server ERROR!")
+            }
+          }
+        })
+      }
     }
   </script>
 </head>
@@ -116,7 +114,7 @@
   </div>
 
   <!-- CREATE -->
-  <div class="flex  items-center flex-col text-white items-center my-7">
+  <form class="flex  items-center flex-col text-white items-center my-7">
     <div class="my-3 w-1/2 flex justify-center block items-center">
       <text style="width:91px; text-align: right;">상호명</text>
       <input class="w-1/2 rounded p-3 ml-2 text-slate-700" id="business_name" type="text" placeholder="ex) 교촌치킨"
@@ -124,7 +122,7 @@
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">
       <text style="width:91px; text-align: right;">최소인원</text>
-      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="number" id="min_per" placeholder="ex) 3" />
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" min="2" type="number" id="min_per" placeholder="ex) 3" />
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">
       <text style="width:91px; text-align: right;">시간</text>
@@ -138,9 +136,10 @@
       <text style="width:91px; text-align: right;">오픈 채팅 링크</text>
       <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="text" id="open_link" />
     </div>
-    <button type="submit" onclick="onClickRegister()"
-      class="w-1/3 text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-8">등록하기</button>
-  </div>
+    <input type="submit" onclick="onClickRegister(event)"
+      class="w-1/3 text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-8"
+      value="등록하기" />
+  </form>
 
 </body>
 
