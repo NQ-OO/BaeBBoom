@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/static/turkey.ico">
   <!-- TAIL WIND -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -64,22 +65,43 @@
   </div>
   <div class="flex flex-1 h-screen mt-8 justify-center ">
     <div class="flex flex-col w-2/3 bg-white rounded-lg items-center">
+
+      {% set date =  '%4s' % post.deadline|string %}
+      {% if True %}
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190); width:103px;" class="text-3xl">상호명</text>
-        <text class="w-1/3 text-right text-xl">교촌치킨</text>
+        <text class="w-1/3 text-right text-xl">{{post.shop}}</text>
       </div>
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">최대인원</text>
-        <text class="w-1/3 text-right text-xl">4명</text>
+        <text class="w-1/3 text-right text-xl">{{post.min_num}}명</text>
       </div>
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">시간</text>
-        <text class="w-1/3 text-right text-xl">19:30</text>
+        <text class="w-1/3 text-right text-xl">{{date[:2]}}:{{date[2:]}}</text>
       </div>
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">배달비</text>
-        <text class="w-1/3 text-right text-xl">8000원</text>
+        <text class="w-1/3 text-right text-xl">{{post.delivery_cost}}원</text>
       </div>
+      {% endif %}
+      <!-- <div class="my-3 flex justify-center block items-center my-4 w-full">
+        <text style="text-align: right; color: rgb(43,195,190); width:103px;" class="text-3xl">상호명</text>
+        <text class="w-1/3 text-right text-xl">{{post.shop}}</text>
+      </div> -->
+      <!-- <div class="my-3 flex justify-center block items-center my-4 w-full">
+        <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">최대인원</text>
+        <text class="w-1/3 text-right text-xl">4명</text>
+      </div> -->
+      <!-- <div class="my-3 flex justify-center block items-center my-4 w-full">
+        <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">시간</text>
+        <text class="w-1/3 text-right text-xl">19:30</text>
+      </div> -->
+      <!-- <div class="my-3 flex justify-center block items-center my-4 w-full">
+        <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">배달비</text>
+        <text class="w-1/3 text-right text-xl">8000원</text>
+      </div> -->
+      <!-- 신청한 아이디가 user_list에 있다면 링크 보여주고 아니라면 버튼 보여주기 -->
       <div class="my-3 flex justify-center block items-center w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">링크</text>
         <text class="w-1/3 text-right text-xl">퓽퓽퓽</text>

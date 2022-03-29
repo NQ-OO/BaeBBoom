@@ -2,6 +2,7 @@
 
 
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 from flask import Flask, render_template, jsonify, request
 import requests
 # from flask_wtf import FlaskForm
@@ -23,7 +24,7 @@ client = MongoClient('localhost', 27017)
 db = client.dbjungle
 
 now = datetime.now()
-current_time = now.strftime("%H:%M")
+current_time = int(now.strftime("%H%M"))
 
 # 메인페이지
 
@@ -33,8 +34,23 @@ current_time = now.strftime("%H:%M")
 #     return render_template('index.html')
 @app.route('/', methods=['GET'])
 def home():
-    posts_list = list(db.posts.find({}, {'_id': False}).sort('deadline', 1))
-    return render_template('index.html', posts=posts_list)
+    all_posts_list = list(db.posts.find({}).sort('deadline', 1))
+    posts_list = []
+    for posts in all_posts_list :
+        register_date = datetime.strptime(posts['date'],"%y%m%d")
+        print(type(posts['deadline']))
+        # print(posts['deadline'])
+        print(type(current_time))
+        # print(current_time)
+        # 0. if문 해서 시간내에 있는거만 검색하기
+        # deadline = int(posts['deadline'])
+        if (now - register_date).days == 0 :
+            # print("날짜 오늘")
+            if posts['deadline'] - current_time >= 0 :
+                # print("시간도 아직 안지남")
+                posts_list.append(posts)
+
+    return render_template('index.html', orders=posts_list)
 
 # 리스트 출력하기
 # <<<<<<< youngji
@@ -57,15 +73,15 @@ def home():
 
 
 
-@app.route('/list', methods=['GET'])
-def posts_list():
-    # 0. if문 해서 시간내에 있는거만 검색하기
+# @app.route('/list', methods=['GET'])
+# def posts_list():
+#     # 0. if문 해서 시간내에 있는거만 검색하기
 
-    # 해당 post를 id를 제외하고 정렬
-    posts_list = list(db.posts.find({}, {'_id': False}).sort('deadline', 1))
+#     # 해당 post를 id를 제외하고 정렬
+#     posts_list = list(db.posts.find({}, {'_id': False}).sort('deadline', 1))
 
-    # 2. 성공하면 success메시지와 목록을 클라이언트로 보내주기
-    return jsonify({'result': 'success', 'posts': posts_list})
+#     # 2. 성공하면 success메시지와 목록을 클라이언트로 보내주기
+#     return jsonify({'result': 'success', 'posts': posts_list})
 
 
 
@@ -83,7 +99,9 @@ def register():
     register_date = now.strftime("%y%m%d")
     shop_receive = request.form['business_name']
     min_num_receive = request.form['min_per']
-    deadline_receive = int(request.form['time'])
+
+    deadline_receive = int(request.form['realtime'])
+
     delivery_cost_receive = request.form['fee']
     open_url_receive = request.form['open_link']
     user_receive = request.form['user_id']  # 유저 변수에 저장
@@ -102,16 +120,16 @@ def register():
 
 # 상세페이지
 
-@app.route('/spec', methods=['GET'])
-def spec():
+@app.route('/spec/<objectId>', methods=['GET'])
+def spec(objectId):
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
-    id_receive = request.form['object_id_give']
+    id_receive =  objectId
 
     # 2. 해당 정보 찾기
-    post = db.posts.find_one({'_id': id_receive})
-
+    post = db.posts.find_one({'_id':ObjectId(objectId)})
+    
     # 3. 해당 정보 보냐쥬기 - id 제외하고????
-    return jsonify({'result': 'success', 'post': post})
+    return render_template('detail.html', post=post)
 
 
 # 함께하기

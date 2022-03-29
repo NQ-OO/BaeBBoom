@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <link rel="shortcut icon" href="/static/turkey.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -74,6 +75,9 @@
     function onClickPlusBtn() {
       window.location.href = './register';
     }
+    function onClickList(objectId) {
+      window.location.href = './spec/' + objectId;
+    }
   </script>
 </head>
 
@@ -105,8 +109,11 @@
           함께하기
         </button>
       </li> -->
-      {% for post in posts %}
-      <li class="bg-white my-4 w-1/2 block p-6 rounded" id={{post._id}}>{{post.shop}} {{post.deadline}}시까지 예약받음
+      {% for post in orders %}
+      {% set date =  '%4s' % post.deadline|string %}
+      <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
+        {{post.shop}}
+        {{date[:2]}}:{{date[2:]}}까지 예약받음
         인원:{{post.user_list|length}}/{{post.min_num}}
         <button onclick="onClickSpec()">
           함께하기
@@ -114,6 +121,7 @@
       </li>
       {% endfor %}
     </ul>
+
 
   </div>
 
