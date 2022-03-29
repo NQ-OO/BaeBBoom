@@ -1,16 +1,13 @@
 
 
-
-
 from flask import Flask, render_template , jsonify, request
-# from flask_wtf import FlaskForm
-from flask_wtf.csrf import CSRFProtect 
-from forms import SignupForm
-from asyncio.windows_events import NULL
+#from flask_wtf import FlaskForm
+#from flask_wtf.csrf import CSRFProtect 
+# from forms import SignupForm
 from pickle import GET
 from unittest import result
 from datetime import datetime
-# from wtforms import StringField, submitField
+#from wtforms import StringField, submitField
 # from wtforms.validators import DataRequired
 
 
@@ -31,13 +28,20 @@ def home():
   return render_template('index.html')
 
 # 리스트 출력하기
-@app.route('/list',methods='GET')
+@app.route('/list',methods=['GET'])
 def posts_list():
-    #0. if문 해서 시간내에 있는거만 검색하기
+     
+    all_posts_list = list(db.posts.find({}).sort('deadline', 1))
+    posts_list = []
+    for posts in all_posts_list : 
+        register_date = datetime.strptime(posts['date'],"%Y%m%d")
+        #0. if문 해서 시간내에 있는거만 검색하기
+        if (now - register_date).days == 0 :
+            print("날짜 오늘")
+            if current_time - posts['deadline'] >= 0 :
+                print("시간도 아직 안지남")
+                posts_list.append(posts)
 
-    #해당 post를 id를 제외하고 정렬
-    posts_list = list(db.posts.find({}, {'_id': False}).sort('deadline', 1))
-    
     #2. 성공하면 success메시지와 목록을 클라이언트로 보내주기
     return jsonify({'result':'success', 'posts' : posts_list})
 
@@ -47,14 +51,16 @@ def posts_list():
 @app.route('/register', methods=['POST'])
 def register():
     # 1. 클라이언트 데이터 받기
+
+    register_date = now.strftime("%y%m%d")
     shop_receive = request.form['shop_give']
     min_num_receive = request.form['min_num_give']
-    deadline_receive = request.form['deadline_give']
+    deadline_receive = int(request.form['deadline_give']) 
     delivery_cost_receive = request.form['delivery_cost_give']
     open_url_receive = request.form['open_url_give']
     user_receive = request.form['user_give']# 유저 변수에 저장
  
-    post = {'shop' : shop_receive,'min_num' : min_num_receive, 'deadline' : deadline_receive, 'delivery_cost' : delivery_cost_receive, 'open_url' : open_url_receive, 'user_list' : [user_receive]} #user 변수 list에 저장
+    post = {'date': register_date,'shop' : shop_receive,'min_num' : min_num_receive, 'deadline' : deadline_receive, 'delivery_cost' : delivery_cost_receive, 'open_url' : open_url_receive, 'user_list' : [user_receive]} #user 변수 list에 저장
 
     # 2. mongoDB에 데이터 넣기
     db.posts.insert_one(post)
@@ -117,9 +123,9 @@ def signup():
 
 
 if __name__ == '__main__':
-    app.config['SECRET_KEY'] = "secret_key"
-    csrf = CSRFProtect()
-    csrf.init_app(app)
+    #app.config['SECRET_KEY'] = "secret_key"
+    #csrf = CSRFProtect()
+    #csrf.init_app(app)
     
     
     app.run('0.0.0.0', port=5000, debug=True)
