@@ -5,7 +5,7 @@ app = Flask(__name__)
 # 메인페이지
 @app.route('/')
 def home():
-  return render_template(index.html)
+  return render_template('index.html')
 
 # 등록페이지
 @app.route('/register')
