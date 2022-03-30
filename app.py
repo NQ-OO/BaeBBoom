@@ -124,7 +124,7 @@ def register():
     now = datetime.now()
     form = RegisterForm()
     if request.method == 'GET' :
-      return render_template('register.html', username = session.get("username"), form = form)
+      return render_template('register.html', username = session.get("username"), form = form, login=True)
     else :
       # # 1. 클라이언트 데이터 받기
       ####username, jwt,
@@ -160,13 +160,17 @@ def register():
 
 @app.route('/spec/<objectId>', methods=['GET'])
 def spec(objectId):
-    # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
+  # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
 
     # 2. 해당 정보 찾기
     post = order_db.posts.find_one({'_id':ObjectId(objectId)})
     
-    # 3. 해당 정보 보냐쥬기 - id 제외하고????
-    return render_template('detail.html', post=post)
+    
+    if "username" in session :
+        print(session)
+        return render_template('detail.html', username = session.get("username"), login=True, post=post)
+    else : 
+        return render_template('detail.html', login=False, post=post)
 
 
 # 함께하기
