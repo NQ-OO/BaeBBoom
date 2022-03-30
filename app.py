@@ -45,24 +45,6 @@ login_manager.init_app(app)
 def load_user(username) :
   return db.users.find_one({'username' : username})
 
-#@login_required
-
-
-
-
-
-
-
-
-
-# 메인페이지
-
-
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
-
-
   
   
 @app.route('/', methods=['GET'])
@@ -128,7 +110,6 @@ def home():
 @app.route('/register', methods=['GET','POST'])
 def register():
     
-    ###################################NQ##########################################
     now = datetime.now()
     form = RegisterForm()
     if request.method == 'GET' :
@@ -181,15 +162,17 @@ def spec(objectId):
 # 함께하기
 
 @app.route('/together', methods=['POST'])
-@jwt_required
+# @jwt_required
 def together():
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
     
     id_receive = request.form['objectId']
     user_receive = request.form['user_id']  # 유저 변수에 저장
+    print("debug")
+
 
     # 2. 해당 정보 찾기
-    post = db.posts.find_one({'_id': ObjectId(id_receive)})
+    post = order_db.posts.find_one({'_id': ObjectId(id_receive)})
     open_url = post['open_url']
     print("open_url :", open_url)
 

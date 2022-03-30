@@ -74,15 +74,18 @@
     // }
     function onClickTogether(e) {
       e.stopPropagation();
-      // console.log(event.path[1].id);
+      //console.log(event.target.parentNode.id);
       // console.log(this);
       let user_id = '{{ username }}';
-      let objectId = event.path[1].id;
+      let objectId = event.target.parentNode.id;
+      console.log(user_id);
+      console.log(objectId);
 
       $.ajax({
         type: "POST",
         url: "/together",
-        data: { user_id, objectId }, // 데이터 주는방법
+        data: { user_id, objectId },
+         // 데이터 주는방법
         success: function (response) { // 성공하면
           if (response["result"] == "success") {
             // alert(response["msg"]);
@@ -90,12 +93,14 @@
             // alert("등록완료!");
             // window.location.href = './';
             // alert(response['open_url']);
+            console.log('debug');
             if (window.confirm('확인 누르면 오픈채팅방으로 이동합니다!')) {
               window.location.href = response['open_url'];
             } else {
               location.reload();
             }
           } else {
+            console.log('debug3');
             alert("server ERROR!")
           }
         }
@@ -121,7 +126,7 @@
     <div>
       <a href='/'><text
           style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800; letter-spacing: 10px;">배뿜</text></a>
-      <text style="font-size:20px; color:white;">배달비를 뿜!하자</text>
+      <text style="font-size:20px; color:white;">배달비를 뿜!하다</text>
       {%if login == True %}
       {{username}}님, 안녕하세요
       {%else%}
@@ -168,21 +173,24 @@
         </button>
       </li> -->
       {% if orders|length > 0 %}
-      {% for post in orders %}
-      {% set date = post.deadline|string %}
-      <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
-        {{post.shop}}
-        {{date[6:8]}}:{{date[8:]}}까지 예약받음
-        인원:{{post.user_list|length}}/{{post.min_num}}
+        {% for post in orders %}
+          {% set date = post.deadline %}
+          <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
+            {{post.shop}}
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            {{ date }}까지 예약받음
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            현재인원 / 최소인원 : {{post.user_list|length+1}} / {{post.min_num}}
 
-        {% if username not in post.user_list %}
-        <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
-          함께하기
-        </button>
-        {% endif %}
+            {% if username not in post.user_list %}
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+              <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
+                함께하기
+              </button>
+            {% endif %}
 
-      </li>
-      {% endfor %}
+          </li>
+        {% endfor %}
       {% endif %}
     </ul>
 

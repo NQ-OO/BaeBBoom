@@ -103,11 +103,11 @@
       </div>
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">인원</text>
-        <text class="w-1/3 text-right text-xl">{{post.user_list|length}} / {{post.min_num}} 명</text>
+        <text class="w-1/3 text-right text-xl">{{post.user_list|length+1}} / {{post.min_num}} 명</text>
       </div>
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">시간</text>
-        <text class="w-1/3 text-right text-xl">{{date[6:8]}}:{{date[8:]}}</text>
+        <text class="w-1/3 text-right text-xl">{{date}}</text>
       </div>
       <div class="my-3 flex justify-center block items-center my-4 w-full">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">배달비</text>
