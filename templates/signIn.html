@@ -57,21 +57,6 @@
     function onClickLogin() {
       let id = $('#user_id').val();
       let pwd = $('#password').val();
-      console.log(id, pwd);
-      // $.ajax({
-      //   type: "POST",
-      //   url: "/login",
-      //   data: { id,pwd }, // 데이터 주는방법
-      //   success: function (response) { // 성공하면
-      //     if (response["result"] == "success") {
-      //       alert(response["msg"]);
-      //       // 3. 성공 시 페이지 새로고침
-      //       window.location.href = './';
-      //     } else {
-      //       alert("server ERROR!")
-      //     }
-      //   }
-      // })
     }
     function onClickSignUpBtn() {
       window.location.href = './signup';
@@ -114,13 +99,6 @@
         </form>
 
       </div>
-
-      <!-- <div class="text-grey-dark mt-6">
-        아이디 없엉?
-        <a class="no-underline border-b border-blue text-blue" href="../login/">
-          회원가입하러가기
-        </a>.
-      </div> -->
     </div>
   </div>
   <script>

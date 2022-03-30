@@ -17,11 +17,7 @@
   <script>
 
     $(".closealertbutton").click(function (e) {
-      // $('.alertbox')[0].hide()
-      // e.preventDefault();
       pid = $(this).parent().parent().hide(500)
-      console.log(pid)
-      // $(".alertbox", this).hide()
     })
 
 
@@ -68,27 +64,6 @@
       let id = $("#user_id").val();
       let pwd = $("#password").val();
       let confirm_pwd = $("#confirm_password").val();
-      // console.log(id);
-      console.log("id :", id);
-      console.log("password :", pwd);
-      console.log("confirm_password :", pwd);
-
-      // 통신
-      // $.ajax({
-      //   type: "POST",
-      //   url: "/signup",
-      //   data: { id, pwd, confirm_pwd }, // 데이터 주는방법
-      //   success: function (response) { // 성공하면
-      //     if (response["result"] == "success") {
-      //       alert(response["msg"]);
-      //       // 3. 성공 시 페이지 새로고침
-      //       window.location.reload()
-      //     } else {
-      //       alert("server ERROR!")
-      //     }
-      //   }
-      // })
-      //window.location.href = './login';
     }
   </script>
 </head>
