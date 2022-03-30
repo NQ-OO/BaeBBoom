@@ -51,8 +51,8 @@ def load_user(username) :
 client = MongoClient('localhost', 27017)
 db = client.dbjungle
 
-now = datetime.now()
-current = int(now.strftime("%y%m%d%H%M"))
+
+
 
 # 메인페이지
 
@@ -63,8 +63,8 @@ current = int(now.strftime("%y%m%d%H%M"))
 @app.route('/', methods=['GET'])
 def home():
     # 등록페이지
-    print(current)
-
+    now = datetime.now()
+    current = int(now.strftime("%y%m%d%H%M"))
     posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
 
     if "user" in session : 
@@ -119,7 +119,7 @@ def register_page():
 
 @app.route('/register', methods=['POST'])
 def register():
-
+    now = datetime.now()
     # # 1. 클라이언트 데이터 받기
     deadline_receive = int(now.strftime("%y%m%d") + request.form['realtime'])
     shop_receive = request.form['business_name']
