@@ -138,10 +138,10 @@
         </button>
       </li> -->
       {% for post in orders %}
-      {% set date =  '%4s' % post.deadline|string %}
+      {% set date = post.deadline|string %}
       <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
         {{post.shop}}
-        {{date[:2]}}:{{date[2:]}}까지 예약받음
+        {{date[6:8]}}:{{date[8:]}}까지 예약받음
         인원:{{post.user_list|length}}/{{post.min_num}}
         <button onclick="onClickSpec()">
           함께하기
