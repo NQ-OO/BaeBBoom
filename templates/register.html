@@ -48,9 +48,9 @@
     function onClickRegister(e) {
       e.preventDefault();
       // err all hidden
-      $("#allErr").hide();
-      $("#perErr").hide();
-      $("#timeErr").hide();
+      // $("#allErr").hide();
+      // $("#perErr").hide();
+      // $("#timeErr").hide();
       let today = new Date();
       let nowHour = today.getHours();
       let nowMinute = today.getMinutes();
@@ -58,13 +58,19 @@
       let business_name = $("#business_name").val();
       let min_per = $("#min_per").val();
       let time = $("#time").val();
+      console.log("time:", time);
       let fee = $("#fee").val();
       let open_link = $("#open_link").val();
-      let user_id = 'Turkey';
+      let user_id = 'ZeroG';
       let [hour, minutes] = time.split(':');
       // console.log(minutes);
-
-      console.log(business_name.trim(), min_per.trim(), time.trim(), fee.trim(), open_link.trim());
+      // hour = Number(hour);
+      // minutes = Number(minutes);
+      // console.log(typeof hour);
+      // console.log(hour);
+      // console.log(typeof minutes);
+      // console.log(minutes);
+      // console.log(business_name.trim(), min_per.trim(), time.trim(), fee.trim(), open_link.trim());
       // min_per > 1
       // time 양식 00:00
       if (business_name.trim() == '' || min_per == '' || time.trim() == '' || fee == '' || open_link == '') {
@@ -79,8 +85,10 @@
         $("#perErr").show();
       }
 
-      else if (hour > 23 || minutes >= 60 || minutes == undefined || hour < nowHour || (hour = nowHour && minutes < nowMinute)) {
+      else if (hour > 23 || minutes >= 60 || minutes == undefined || hour < nowHour || (hour == nowHour && minutes < nowMinute)) {
         // alert("시간을 제대로 입력하라옹!!!");
+        // console.log("hour :", hour, "nowHour:", nowHour);
+        // console.log("minutes :", minutes, "nowMinute:", nowMinute);
         // timeErr hidden delete
         $("#timeErr").show();
       }
@@ -89,9 +97,15 @@
 
       // 통신
       else {
-        hour = hour.padStart(2, '0');
+        hour = hour.toString();
+        minutes = minutes.toString();
+        // hour = hour.padStart(2, '0');
         minutes = minutes.padStart(2, '0');
         let realtime = hour + minutes;
+        // realtime = Number(realtime);
+        // console.log("realtime");
+        // console.log(realtime);
+        // console.log(typeof realtime);
         $.ajax({
           type: "POST",
           url: "/register",
@@ -131,7 +145,7 @@
 
   <!-- CREATE -->
   <form class="flex  items-center flex-col text-white items-center my-7">
-    <div class="text-red-600 hidden" id="allErr">
+    <div class="text-red-600 hidden w-1/3 text-right ml-6" id="allErr">
       <text>모두 필수사항입니다. 입력해주세요.</text>
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">
@@ -143,14 +157,14 @@
       <text style="width:91px; text-align: right;">최소인원</text>
       <input class="w-1/2 rounded p-3 ml-2 text-slate-700" min="2" type="number" id="min_per" placeholder="ex) 3" />
     </div>
-    <div class="text-red-600 hidden" id="perErr">
+    <div class="text-red-600 hidden w-1/3 text-right ml-6" id="perErr">
       <text>인원 수를 제대로 입력하세요.</text>
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">
       <text style="width:91px; text-align: right;">시간</text>
       <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="text" id="time" placeholder="ex) 16:30, 00:30" />
     </div>
-    <div class="text-red-600 hidden" id="timeErr">
+    <div class="text-red-600 hidden w-1/3 text-right ml-6" id="timeErr">
       <text>시간을 제대로 입력하세요. -.-</text>
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">

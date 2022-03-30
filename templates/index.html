@@ -65,9 +65,34 @@
     //   })
 
     // }
+    function onClickTogether(e) {
+      e.stopPropagation();
+      // console.log(event.path[1].id);
+      // console.log(this);
+      let user_id = 'Turkey';
+      let objectId = event.path[1].id;
 
-    function onClickSpec() {
-      console.log("let it go");
+      $.ajax({
+        type: "POST",
+        url: "/together",
+        data: { user_id, objectId }, // 데이터 주는방법
+        success: function (response) { // 성공하면
+          if (response["result"] == "success") {
+            // alert(response["msg"]);
+            // 3. 성공 시 페이지 새로고침
+            // alert("등록완료!");
+            // window.location.href = './';
+            // alert(response['open_url']);
+            if (window.confirm('확인 누르면 오픈채팅방으로 이동합니다!')) {
+              window.location.href = response['open_url'];
+            } else {
+              location.reload();
+            }
+          } else {
+            alert("server ERROR!")
+          }
+        }
+      })
     }
     function onClickLoginBtn() {
       window.location.href = './signin';
@@ -109,17 +134,26 @@
           함께하기
         </button>
       </li> -->
+      {% if orders|length > 0 %}
       {% for post in orders %}
       {% set date =  '%4s' % post.deadline|string %}
       <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
         {{post.shop}}
         {{date[:2]}}:{{date[2:]}}까지 예약받음
         인원:{{post.user_list|length}}/{{post.min_num}}
-        <button onclick="onClickSpec()">
+        {% set user_id = 'Turkey' %}
+        {% for user in post.user_list if user != user_id %}
+
+        <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
           함께하기
         </button>
+
+
+        {% endfor %}
+
       </li>
       {% endfor %}
+      {% endif %}
     </ul>
 
 
