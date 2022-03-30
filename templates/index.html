@@ -80,12 +80,11 @@
       let objectId = event.target.parentNode.id;
       console.log(user_id);
       console.log(objectId);
-
       $.ajax({
         type: "POST",
         url: "/together",
         data: { user_id, objectId },
-         // 데이터 주는방법
+        // 데이터 주는방법
         success: function (response) { // 성공하면
           if (response["result"] == "success") {
             // alert(response["msg"]);
@@ -93,7 +92,7 @@
             // alert("등록완료!");
             // window.location.href = './';
             // alert(response['open_url']);
-            console.log('debug');
+            // console.log('debug');
             if (window.confirm('확인 누르면 오픈채팅방으로 이동합니다!')) {
               window.location.href = response['open_url'];
             } else {
@@ -110,7 +109,13 @@
       window.location.href = './signin';
     }
     function onClickPlusBtn() {
-      window.location.href = './register';
+      let user_status = '{{ login }}';
+      console.log(user_status);
+      if (user_status == 'True') {
+        window.location.href = './register';
+      } else {
+        alert('로그인해주세요');
+      }
     }
     function onClickList(objectId) {
       window.location.href = './spec/' + objectId;
@@ -141,14 +146,14 @@
     <a href="/logout">
       <button
         style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-        LOGOUT
+        로그아웃
       </button>
     </a>
     {% else %}
     <a href="/signin">
       <button
         style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-        LOGIN
+        로그인
       </button>
     </a>
     <a href="/signup">
@@ -173,24 +178,32 @@
         </button>
       </li> -->
       {% if orders|length > 0 %}
-        {% for post in orders %}
-          {% set date = post.deadline %}
-          <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
-            {{post.shop}}
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            {{ date }}까지 예약받음
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            현재인원 / 최소인원 : {{post.user_list|length+1}} / {{post.min_num}}
+      {% for post in orders %}
+      {% set date = post.deadline %}
+      <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
+        {{post.shop}}
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        {{ date }}까지 예약받음
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        현재인원 / 최소인원 : {{post.user_list|length+1}} / {{post.min_num}}
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        {% if login ==False %}
 
-            {% if username not in post.user_list %}
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-              <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
-                함께하기
-              </button>
-            {% endif %}
-
-          </li>
-        {% endfor %}
+        {% elif username == post.register_user %}
+        <button class="z-40 border-emerald-700 border-2 p-1 right-5">
+          생성한 방
+        </button>
+        {% elif username not in post.user_list %}
+        <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
+          함께하기
+        </button>
+        {% else %}
+        <button class="z-40 border-emerald-700 border-2 p-1 right-5">
+          신청완료
+        </button>
+        {% endif %}
+      </li>
+      {% endfor %}
       {% endif %}
     </ul>
 
