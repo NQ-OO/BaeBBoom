@@ -54,7 +54,7 @@ def home():
     print(current_day)
     current_time = int(now.strftime("%H%M"))
     # posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
-    today_posts_list = list(order_db.posts.find({'date': {"$in" : [current_day]}}))
+    today_posts_list = list(order_db.posts.find({'date': {"$in" : [current_day]}}).sort('deadline', 1))
 
     posts_list = []
     for post in today_posts_list :
