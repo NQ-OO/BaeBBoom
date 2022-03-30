@@ -8,7 +8,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
   <link rel="shortcut icon" href="/static/turkey.ico">
   <!-- TAIL WIND -->
@@ -94,9 +95,9 @@
 
 <body style="background-color: rgb(43,195,190); display: flex; flex-direction: column;">
   {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{message}}
-    </div>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{message}}
+  </div>
   {% endfor %}
 
 
@@ -104,37 +105,43 @@
   <div class="min-h-screen flex flex-col">
     <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
       <div class="py-8 rounded text-white w-full">
-        <h1 class="mb-8 text-8xl text-center" style="font-weight: 600; ">배 뿜</h1>
+        <h1 class="mb-8 text-8xl text-center cursor-pointer" style="font-weight: 600;" id="logo">배 뿜</h1>
 
-        <form method = "POST">
+        <form method="POST">
           {{form.csrf_token}}
           <div style="display: flex; justify-content: space-evenly; align-items: center;" class="w-full">
             <text style="width: 56px;">아이디</text>
             {{form.username(class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700")}}
-            
+
           </div>
 
           <div style="display: flex; justify-content: space-evenly; align-items: center;">
             <text style="width: 56px;">비밀번호</text>
             {{form.password(class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700 font-sans")|safe}}
-            
+
           </div>
 
           <div style="display: flex; justify-content: space-evenly; align-items: center;">
             <text style="width: 56px;">비밀번호 확인</text>
             {{form.password_check(class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700 font-sans"|safe)}}
-            
+
           </div>
 
           {{ form.submit(class="w-full text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-1") }}
 
-      </form>
+        </form>
 
       </div>
 
 
     </div>
   </div>
+  <script>
+    const logoText = document.getElementById('logo');
+    logoText.addEventListener('click', function () {
+      location.href = "/";
+    })
+  </script>
 </body>
 
 </html>

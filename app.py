@@ -52,8 +52,8 @@ def load_user(username) :
 
 
 
-now = datetime.now()
-current_time = int(now.strftime("%H%M"))
+
+
 
 # 메인페이지
 
@@ -78,6 +78,16 @@ def home():
         return render_template('index.html', username = session.get("username"), login=True, orders=posts_list)
     else : 
         return render_template('index.html', login=False, orders=posts_list)
+      
+    # posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
+
+    # if "user" in session : 
+    #     print(session)
+    #     return render_template('index.html', username = session.get("user")["username"], login=True, orders=posts_list)
+    # else : 
+    #     return render_template('index.html', login=False, orders=posts_list)
+
+
 
 # 리스트 출력하기
 # <<<<<<< youngji
@@ -115,9 +125,11 @@ def home():
 # 등록페이지
 
 
-
 @app.route('/register', methods=['GET','POST'])
 def register():
+    
+    ###################################NQ##########################################
+    now = datetime.now()
     form = RegisterForm()
     if request.method == 'GET' :
       return render_template('register.html', username = session.get("username"), form = form)
@@ -129,6 +141,7 @@ def register():
         register_user = session.get("username")  
         print("debug")
         register_date = now.strftime("%y%m%d")
+        ######################### deadline_receive = int(now.strftime("%y%m%d") + request.form['realtime'])#######TODO###########
         shop_receive = form.shop.data
         min_num_receive = form.min_person.data
         deadline_receive = form.deadline.data
@@ -149,14 +162,14 @@ def register():
         return render_template("register.html", form = form)
       
     return redirect(url_for("home"))
-
+ 
+    
 
 # 상세페이지
 
 @app.route('/spec/<objectId>', methods=['GET'])
 def spec(objectId):
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
-    id_receive =  objectId
 
     # 2. 해당 정보 찾기
     post = order_db.posts.find_one({'_id':ObjectId(objectId)})
@@ -171,23 +184,25 @@ def spec(objectId):
 @jwt_required
 def together():
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
-    id_receive = request.form['object_id_give']
-    user_receive = request.form['user_give']  # 유저 변수에 저장
+    
+    id_receive = request.form['objectId']
+    user_receive = request.form['user_id']  # 유저 변수에 저장
 
     # 2. 해당 정보 찾기
-    post = order_db.posts.find_one({'_id': id_receive})
+    post = db.posts.find_one({'_id': ObjectId(id_receive)})
     open_url = post['open_url']
+    print("open_url :", open_url)
 
     # 3. user_list에 현재 사용자 추가
     #new_num = post['num']+1
-    new_user_list = post['user_list'].append(user_receive)
+    post['user_list'].append(user_receive)
 
     # 4. 해당 변수 저장해주기
-    order_db.posts.update_one({'_id': id_receive}, {
-                        '$set': {'user_list': new_user_list}})
+    db.posts.update_one({'_id': ObjectId(id_receive)}, {
+                        '$set': {'user_list': post['user_list']}})
 
     # 5. 링크 보내기
-    return jsonify({'result': 'success', 'open_url': open_url})
+    return jsonify({'result': 'success', 'open_url': post['open_url']})
 
 # 로그인 페이지
 
@@ -259,9 +274,9 @@ def logout():
   
 
 if __name__ == '__main__':
-  WTF_CSRF_SECRET_KEY="a csrf secret key"
-  csrf = CSRFProtect()
-  csrf.init_app(app)
+  # WTF_CSRF_SECRET_KEY="a csrf secret key"
+  # csrf = CSRFProtect()
+  # csrf.init_app(app)
   app.run('0.0.0.0', port=5000, debug=True)
 
 
