@@ -47,6 +47,9 @@
   <script>
     function onClickRegister(e) {
       e.preventDefault();
+      let today = new Date();
+      let nowHours = today.getHours();
+      let nowMinutes = today.getMinutes();
 
       let business_name = $("#business_name").val();
       let min_per = $("#min_per").val();
@@ -68,7 +71,7 @@
         // location.reload();
       }
 
-      else if (hour > 23 || minutes >= 60 || minutes == undefined) {
+      else if (hour > 23 || minutes >= 60 || minutes == undefined || hour < nowHours || minutes < nowMinutes) {
         alert("시간을 제대로 입력하라옹!!!");
         // location.reload();
       }
@@ -134,7 +137,7 @@
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">
       <text style="width:91px; text-align: right;">배달비</text>
-      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="number" id="fee" placeholder="ex) 8000" />
+      <input class="w-1/2 rounded p-3 ml-2 text-slate-700" type="number" id="fee" placeholder="ex) 8000" step="500" />
     </div>
     <div class="my-3 w-1/2 flex justify-center block items-center">
       <text style="width:91px; text-align: right;">오픈 채팅 링크</text>
