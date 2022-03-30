@@ -8,8 +8,6 @@ from flask import Flask, render_template, request, redirect, flash, url_for, ses
 from flask_wtf.csrf import CSRFProtect 
 from forms import SignupForm, LoginForm
 # from wtforms import StringField, submitField
-
-
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import Flask, render_template, jsonify, request
