@@ -136,14 +136,14 @@
     <a href="/logout">
       <button
         style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-        LOGOUT
+        로그아웃
       </button>
     </a>
     {% else %}
     <a href="/signin">
       <button
         style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-        LOGIN
+        로그인
       </button>
     </a>
     <a href="/signup">
@@ -174,12 +174,17 @@
         {{post.shop}}
         {{date[6:8]}}:{{date[8:]}}까지 예약받음
         인원:{{post.user_list|length}}/{{post.min_num}}
-
-        {% if username not in post.user_list %}
+        {% if login == False %}
+        {% elif username not in post.user_list %}
         <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
           함께하기
         </button>
+        {% elif username in post.user_list %}
+        <button onclick="onClickTogether(event)" class="z-40 border-slate-500 border-2 p-1 right-5 bg-slate-500">
+          신청완료
+        </button>
         {% endif %}
+
 
       </li>
       {% endfor %}

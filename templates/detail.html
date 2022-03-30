@@ -87,10 +87,27 @@
 
     </div>
     <!-- LOGIN OR LOGOUT -->
-    <button onclick="onClickLoginBtn()"
-      style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-      로그인
-    </button>
+    {% if login == True%}
+    <a href="/logout">
+      <button
+        style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+        로그아웃
+      </button>
+    </a>
+    {% else %}
+    <a href="/signin">
+      <button
+        style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+        로그인
+      </button>
+    </a>
+    <a href="/signup">
+      <button
+        style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+        회원가입
+      </button>
+    </a>
+    {% endif %}
   </div>
   <div class="flex flex-1 h-screen mt-8 justify-center ">
     <div class="flex flex-col w-2/3 bg-white rounded-lg items-center">

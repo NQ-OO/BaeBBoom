@@ -113,9 +113,9 @@ def home():
 @app.route('/register')
 def register_page():
     if "user" in session :
-      return render_template('register.html', username = session.get("user")["username"])
+      return render_template('register.html', username = session.get("user")["username"], login=True)
     else :
-      return render_template('register.html')
+      return render_template('register.html', login=False)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -145,13 +145,18 @@ def register():
 
 @app.route('/spec/<objectId>', methods=['GET'])
 def spec(objectId):
-    # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
+  # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
 
     # 2. 해당 정보 찾기
-    post = db.posts.find_one({'_id':ObjectId(objectId)})
-    
     # 3. 해당 정보 보냐쥬기 - id 제외하고????
-    return render_template('detail.html', post=post)
+    post = db.posts.find_one({'_id':ObjectId(objectId)})
+    if "user" in session :
+      return render_template('detail.html', username = session.get("user")["username"], login=True, post=post)
+    else :
+      return render_template('detail.html', login=False, post=post)
+    
+    
+    # return render_template('detail.html', post=post)
 
 
 # 함께하기
