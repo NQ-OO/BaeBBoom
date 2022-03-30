@@ -2,6 +2,7 @@ from crypt import methods
 from distutils.debug import DEBUG
 from email.mime import application
 import imp
+from pickletools import int4
 from unicodedata import name
 from flask import Flask, render_template, request, redirect, flash, url_for, session
 # from flask_wtf import FlaskForm
@@ -51,10 +52,20 @@ def load_user(username) :
 def home():
     # 등록페이지
     now = datetime.now()
-    current = int(now.strftime("%y%m%d%H%M"))
+    current_day = now.strftime("%y%m%d")
+    print(current_day)
+    current_time = int(now.strftime("%H%M"))
     # posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
-    posts_list = list(order_db.posts.find({}))
-    
+    today_posts_list = list(order_db.posts.find({'date': {"$in" : [current_day]}}))
+
+    posts_list = []
+    for post in today_posts_list :
+      hour,min = post['deadline'].split(':')
+      deadline_time = int(hour+min)
+ 
+      if current_time - deadline_time <= 0 :
+                posts_list.append(post)
+
     if "username" in session : 
         print(session)
         return render_template('index.html', username = session.get("username"), login=True, orders=posts_list)
@@ -122,7 +133,6 @@ def register():
         register_user = session.get("username")  
         print("debug")
         register_date = now.strftime("%y%m%d")
-        ######################### deadline_receive = int(now.strftime("%y%m%d") + request.form['realtime'])#######TODO###########
         shop_receive = form.shop.data
         min_num_receive = form.min_person.data
         deadline_receive = form.deadline.data
@@ -168,8 +178,6 @@ def together():
     
     id_receive = request.form['objectId']
     user_receive = request.form['user_id']  # 유저 변수에 저장
-    print("debug")
-
 
     # 2. 해당 정보 찾기
     post = order_db.posts.find_one({'_id': ObjectId(id_receive)})
@@ -179,9 +187,9 @@ def together():
     # 3. user_list에 현재 사용자 추가
     #new_num = post['num']+1
     post['user_list'].append(user_receive)
-
+    print(post['user_list'])
     # 4. 해당 변수 저장해주기
-    db.posts.update_one({'_id': ObjectId(id_receive)}, {
+    order_db.posts.update_one({'_id': ObjectId(id_receive)}, {
                         '$set': {'user_list': post['user_list']}})
 
     # 5. 링크 보내기
