@@ -19,8 +19,8 @@ class LoginForm(FlaskForm):
 
 class RegisterForm(FlaskForm) :
   shop = StringField('username', validators=[DataRequired()])
-  min_person = IntegerField('min_person', validators=[DataRequired()])
+  min_person = IntegerField('min_person', validators=[validators.NumberRange(min=1),DataRequired()])
   deadline = StringField('deadline', validators=[DataRequired()])
-  delivery_cost = StringField('delivery_cost', validators=[DataRequired()])
+  delivery_cost = IntegerField('delivery_cost', validators=[DataRequired()])
   open_url = StringField('open_url', validators=[DataRequired()])
   submit = SubmitField("등록하기")

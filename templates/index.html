@@ -135,7 +135,7 @@
       {%if login == True %}
       {{username}}님, 안녕하세요
       {%else%}
-      로그인 해주세요
+
       {%endif%}
 
 
@@ -156,12 +156,12 @@
         로그인
       </button>
     </a>
-    <a href="/signup">
+    <!-- <a href="/signup">
       <button
         style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
         회원가입
       </button>
-    </a>
+    </a> -->
     {% endif %}
 
   </div>
@@ -180,7 +180,8 @@
       {% if orders|length > 0 %}
       {% for post in orders %}
       {% set date = post.deadline %}
-      <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
+      <li class="bg-white my-4 w-1/2 block p-6 drop-shadow-2xl" id={{post._id}} onclick="onClickList(this.id)"
+        style="border-radius: 15px;">
         {{post.shop}}
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         {{ date }}까지 예약받음
@@ -190,15 +191,15 @@
         {% if login ==False %}
 
         {% elif username == post.register_user %}
-        <button class="z-40 border-emerald-700 border-2 p-1 right-5">
+        <button class="z-40 bg-slate-400 border-2 p-2.5 right-5">
           생성한 방
         </button>
         {% elif username not in post.user_list %}
-        <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
+        <button onclick="onClickTogether(event)" class="bg-amber-100 z-40 border-amber-100 border-2 p-2.5 right-5">
           함께하기
         </button>
         {% else %}
-        <button class="z-40 border-emerald-700 border-2 p-1 right-5">
+        <button class="z-40 border-2 p-2.5 right-5 bg-slate-400">
           신청완료
         </button>
         {% endif %}
