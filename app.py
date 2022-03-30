@@ -1,7 +1,7 @@
 from crypt import methods
 from distutils.debug import DEBUG
 from email.mime import application
-import imp
+import os
 from unicodedata import name
 from flask import Flask, render_template, request, redirect, flash, url_for, session
 # from flask_wtf import FlaskForm
@@ -12,7 +12,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import Flask, render_template, jsonify, request
 import requests
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+
 
 
 from pickle import GET
@@ -31,8 +31,7 @@ order_db = client.order
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
-app.config["JWT_SECRET_KEY"] = "dfafdjfdkfajfa;jieng"  
-jwt = JWTManager(app)
+
 
 
 # flask login stuff
@@ -50,6 +49,7 @@ def load_user(username) :
 @app.route('/', methods=['GET'])
 def home():
     # 등록페이지
+    print("home :", session)
     now = datetime.now()
     current = int(now.strftime("%y%m%d%H%M"))
     # posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
@@ -109,26 +109,22 @@ def home():
 
 @app.route('/register', methods=['GET','POST'])
 def register():
-    
+    print("register :", session)
     now = datetime.now()
     form = RegisterForm()
     if request.method == 'GET' :
       return render_template('register.html', username = session.get("username"), form = form)
     else :
       # # 1. 클라이언트 데이터 받기
-      ####username, jwt,
       session.get("username")
       if form.validate_on_submit():
         register_user = session.get("username")  
-        print("debug")
         register_date = now.strftime("%y%m%d")
-        ######################### deadline_receive = int(now.strftime("%y%m%d") + request.form['realtime'])#######TODO###########
         shop_receive = form.shop.data
         min_num_receive = form.min_person.data
         deadline_receive = form.deadline.data
         delivery_cost_receive = form.delivery_cost.data
         open_url_receive = form.open_url.data
-
 
         post = {'register_user' : register_user, 'date': register_date,'shop': shop_receive, 'min_num': min_num_receive, 'deadline': deadline_receive,
                 'delivery_cost': delivery_cost_receive, 'open_url': open_url_receive, 'user_list': []}  # user 변수 list에 저장
@@ -162,7 +158,6 @@ def spec(objectId):
 # 함께하기
 
 @app.route('/together', methods=['POST'])
-# @jwt_required
 def together():
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
     
@@ -201,18 +196,14 @@ def login():
       password = form.password.data
       user = db.users.find_one({'username' : username},{'_id':False})
       if user and check_password_hash(user['password'], form.password.data) :
-        access_token = create_access_token(identity={"username" : username})
-        print(access_token)
         session['username'] = user['username']
-        print(session)
-        return redirect(url_for("home"))
+        return redirect(url_for("home", login=True))
       else : 
         flash("아이디, 비밀번호가 정확하지 않습니다!")
         return render_template("signIn.html", form = form)
-        
-      
-      # if 
-    return render_template('signIn.html', form = form)
+    else :
+        flash("아이디, 비밀번호가 정확하지 않습니다!")
+        return render_template("signIn.html", form = form)
     
 
 # 회원가입 페이지
@@ -252,7 +243,7 @@ def signup():
 @app.route('/logout')
 def logout():
   session.pop("username")
-  return render_template('index.html', login=False)
+  return redirect(url_for("home"))
   
   
 
