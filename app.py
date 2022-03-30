@@ -6,12 +6,13 @@ from unicodedata import name
 from flask import Flask, render_template, request, redirect, flash, url_for, session
 # from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect 
-from forms import SignupForm, LoginForm
+from forms import SignupForm, LoginForm, RegisterForm
 # from wtforms import StringField, submitField
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import Flask, render_template, jsonify, request
 import requests
+from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
 
 from pickle import GET
@@ -26,9 +27,13 @@ from flask_login import LoginManager, UserMixin, login_user
  
 client = MongoClient('localhost', 27017)
 db = client.user
+order_db = client.order
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'wcsfeufhwiquehfdx'
+app.config["JWT_SECRET_KEY"] = "dfafdjfdkfajfa;jieng"  
+jwt = JWTManager(app)
+
 
 # flask login stuff
 login_manager = LoginManager()
@@ -43,13 +48,9 @@ def load_user(username) :
 #@login_required
 
 
-# application.config.update(
-#   DEBUG = True, 
 
-# )
 
-client = MongoClient('localhost', 27017)
-db = client.dbjungle
+
 
 now = datetime.now()
 current_time = int(now.strftime("%H%M"))
@@ -60,32 +61,23 @@ current_time = int(now.strftime("%H%M"))
 # @app.route('/')
 # def home():
 #     return render_template('index.html')
+
+
+  
+  
 @app.route('/', methods=['GET'])
 def home():
-  if "user" in session : 
-    print(session)
-    return render_template('index.html', username = session.get("user")["username"], login=True)
-  else : 
-    return render_template('index.html', login=False)
-
-# 등록페이지
-    all_posts_list = list(db.posts.find({}).sort('deadline', 1))
-    posts_list = []
-    for posts in all_posts_list :
-        register_date = datetime.strptime(posts['date'],"%y%m%d")
-        print(type(posts['deadline']))
-        # print(posts['deadline'])
-        print(type(current_time))
-        # print(current_time)
-        # 0. if문 해서 시간내에 있는거만 검색하기
-        # deadline = int(posts['deadline'])
-        if (now - register_date).days == 0 :
-            # print("날짜 오늘")
-            if posts['deadline'] - current_time >= 0 :
-                # print("시간도 아직 안지남")
-                posts_list.append(posts)
-
-    return render_template('index.html', orders=posts_list)
+    # 등록페이지
+    now = datetime.now()
+    current = int(now.strftime("%y%m%d%H%M"))
+    # posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
+    posts_list = list(order_db.posts.find({}))
+    
+    if "username" in session : 
+        print(session)
+        return render_template('index.html', username = session.get("username"), login=True, orders=posts_list)
+    else : 
+        return render_template('index.html', login=False, orders=posts_list)
 
 # 리스트 출력하기
 # <<<<<<< youngji
@@ -122,35 +114,41 @@ def home():
 
 # 등록페이지
 
-@app.route('/register')
-def register_page():
-    return render_template('register.html')
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET','POST'])
 def register():
+    form = RegisterForm()
+    if request.method == 'GET' :
+      return render_template('register.html', username = session.get("username"), form = form)
+    else :
+      # # 1. 클라이언트 데이터 받기
+      ####username, jwt,
+      session.get("username")
+      if form.validate_on_submit():
+        register_user = session.get("username")  
+        print("debug")
+        register_date = now.strftime("%y%m%d")
+        shop_receive = form.shop.data
+        min_num_receive = form.min_person.data
+        deadline_receive = form.deadline.data
+        delivery_cost_receive = form.delivery_cost.data
+        open_url_receive = form.open_url.data
 
-    # # 1. 클라이언트 데이터 받기
-    register_date = now.strftime("%y%m%d")
-    shop_receive = request.form['business_name']
-    min_num_receive = request.form['min_per']
 
-    deadline_receive = int(request.form['realtime'])
+        post = {'register_user' : register_user, 'date': register_date,'shop': shop_receive, 'min_num': min_num_receive, 'deadline': deadline_receive,
+                'delivery_cost': delivery_cost_receive, 'open_url': open_url_receive, 'user_list': []}  # user 변수 list에 저장
+        
+        # 2. mongoDB에 데이터 넣기
+        order_db.posts.insert_one(post)
 
-    delivery_cost_receive = request.form['fee']
-    open_url_receive = request.form['open_link']
-    user_receive = request.form['user_id']  # 유저 변수에 저장
-
-
-    post = {'date': register_date,'shop': shop_receive, 'min_num': min_num_receive, 'deadline': deadline_receive,
-            'delivery_cost': delivery_cost_receive, 'open_url': open_url_receive, 'user_list': [user_receive]}  # user 변수 list에 저장
-
-
-    # 2. mongoDB에 데이터 넣기
-    db.posts.insert_one(post)
-    
-
-    return jsonify({'result': 'success'})
+      
+      else :
+        flash("정확한 값을 입력해주세요!")
+        print(form.data)
+        return render_template("register.html", form = form)
+      
+    return redirect(url_for("home"))
 
 
 # 상세페이지
@@ -161,7 +159,7 @@ def spec(objectId):
     id_receive =  objectId
 
     # 2. 해당 정보 찾기
-    post = db.posts.find_one({'_id':ObjectId(objectId)})
+    post = order_db.posts.find_one({'_id':ObjectId(objectId)})
     
     # 3. 해당 정보 보냐쥬기 - id 제외하고????
     return render_template('detail.html', post=post)
@@ -170,13 +168,14 @@ def spec(objectId):
 # 함께하기
 
 @app.route('/together', methods=['POST'])
+@jwt_required
 def together():
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
     id_receive = request.form['object_id_give']
     user_receive = request.form['user_give']  # 유저 변수에 저장
 
     # 2. 해당 정보 찾기
-    post = db.posts.find_one({'_id': id_receive})
+    post = order_db.posts.find_one({'_id': id_receive})
     open_url = post['open_url']
 
     # 3. user_list에 현재 사용자 추가
@@ -184,7 +183,7 @@ def together():
     new_user_list = post['user_list'].append(user_receive)
 
     # 4. 해당 변수 저장해주기
-    db.posts.update_one({'_id': id_receive}, {
+    order_db.posts.update_one({'_id': id_receive}, {
                         '$set': {'user_list': new_user_list}})
 
     # 5. 링크 보내기
@@ -204,7 +203,10 @@ def login():
       password = form.password.data
       user = db.users.find_one({'username' : username},{'_id':False})
       if user and check_password_hash(user['password'], form.password.data) :
-        session['user'] = user
+        access_token = create_access_token(identity={"username" : username})
+        print(access_token)
+        session['username'] = user['username']
+        print(session)
         return redirect(url_for("home"))
       else : 
         flash("아이디, 비밀번호가 정확하지 않습니다!")
@@ -251,7 +253,7 @@ def signup():
       
 @app.route('/logout')
 def logout():
-  session.pop("user")
+  session.pop("username")
   return render_template('index.html', login=False)
   
   
