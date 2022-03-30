@@ -163,7 +163,7 @@ def spec(objectId):
     
     if "username" in session :
         print(session)
-        return render_template('detail.html', username = session.get("username"), login=True, post=post)
+        return render_template('detail.html', username = session.get("username"), login=True, post=post, objectId= objectId)
     else : 
         return render_template('detail.html', login=False, post=post)
 

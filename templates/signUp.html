@@ -103,31 +103,34 @@
 
 
   <div class="min-h-screen flex flex-col">
-    <div class="container max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
+    <div class="container max-w-md mx-auto flex-1 flex flex-col items-center justify-center px-2">
       <div class="py-8 rounded text-white w-full">
-        <h1 class="mb-8 text-8xl text-center cursor-pointer" style="font-weight: 600;" id="logo">배 뿜</h1>
+        <div class="flex items-end mb-8 justify-center">
+          <h1 class="text-8xl text-center cursor-pointer" style="font-weight: 800;" id="logo">배뿜</h1>
+          <text>배달을 뿜!하다</text>
+        </div>
 
         <form method="POST">
           {{form.csrf_token}}
-          <div style="display: flex; justify-content: space-evenly; align-items: center;" class="w-full">
-            <text style="width: 56px;">아이디</text>
+          <div style="display: flex; justify-content: space-evenly; align-items: center;" class="w-full text-2xl">
+            <text style="width:129px;">아이디</text>
             {{form.username(class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700")}}
 
           </div>
 
-          <div style="display: flex; justify-content: space-evenly; align-items: center;">
-            <text style="width: 56px;">비밀번호</text>
+          <div style="display: flex; justify-content: space-evenly; align-items: center;" class="text-2xl">
+            <text style="width: 129px;">비밀번호</text>
             {{form.password(class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700 font-sans")|safe}}
 
           </div>
 
-          <div style="display: flex; justify-content: space-evenly; align-items: center;">
-            <text style="width: 56px;">비밀번호 확인</text>
+          <div style="display: flex; justify-content: space-evenly; align-items: center;" class="text-2xl">
+            <text style="width: 129px;">비밀번호 확인</text>
             {{form.password_check(class="block border border-grey-light w-2/3 p-3 rounded my-2 text-slate-700 font-sans"|safe)}}
 
           </div>
 
-          {{ form.submit(class="w-full text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none my-1") }}
+          {{ form.submit(class="w-full text-center py-3 rounded bg-slate-700 text-white hover:bg-green-dark focus:outline-none mt-8") }}
 
         </form>
 
@@ -139,7 +142,7 @@
   <script>
     const logoText = document.getElementById('logo');
     logoText.addEventListener('click', function () {
-      location.href = "/";
+      location.href = "/signin";
     })
   </script>
 </body>

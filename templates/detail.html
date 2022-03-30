@@ -50,22 +50,49 @@
       var obj = document.getElementById("open_url");
       var range = document.createRange();
       range.selectNode(obj.childNodes[0]); //텍스트 정보를 Range 객체에 저장
-      var sel = window.getSelection();
-      sel.removeAllRanges(); //기존 선택정보 삭제
-      sel.addRange(range); //텍스트 정보 선택
-      document.execCommand("copy"); //복사
-      window.location.href = range;
-      sel.removeRange(range); //선택 정보 삭제
+      // var sel = window.getSelection();
+      // sel.removeAllRanges(); //기존 선택정보 삭제
+      // sel.addRange(range); //텍스트 정보 선택
+      // document.execCommand("copy"); //복사
+      // window.location.href = range;
+      var win = window.open(range, '_blank');
+      win.focus();
+      // sel.removeRange(range); //선택 정보 삭제
     }
 
     function onClickTogether() {
       let link = '{{ post.open_url }}';
-      console.log(link);
-      if (window.confirm('확인 누르면 오픈채팅방으로 이동합니다!')) {
-        window.location.href = link;
-      } else {
-        location.reload();
-      }
+
+      let user_id = '{{username}}';
+
+      let objectId = '{{objectId}}';
+
+      $.ajax({
+        type: "POST",
+        url: "/together",
+        data: { user_id, objectId },
+        // 데이터 주는방법
+        success: function (response) { // 성공하면
+          if (response["result"] == "success") {
+            // alert(response["msg"]);
+            // 3. 성공 시 페이지 새로고침
+            // alert("등록완료!");
+            // window.location.href = './';
+            // alert(response['open_url']);
+            // console.log('debug');
+            if (window.confirm('확인 누르면 오픈채팅방으로 이동합니다!')) {
+              var win = window.open(link, '_blank');
+              win.focus();
+              location.reload();
+            } else {
+              location.reload();
+            }
+          } else {
+            // console.log('debug3');
+            alert("server ERROR!")
+          }
+        }
+      })
     }
 
 
@@ -107,11 +134,11 @@
     {% endif %}
   </div>
   <div class="flex flex-1 h-screen mt-8 justify-center ">
-    <div class="flex flex-col w-2/3 bg-white rounded-lg items-center">
+    <div class="flex flex-col w-1/2 bg-white rounded-lg items-center">
 
       {% set date =  '%4s' % post.deadline %}
       {% if True %}
-      <div class="my-3 flex justify-center block items-center my-4 w-full">
+      <div class="flex justify-center block items-center my-4 w-full mt-16">
         <text style="text-align: right; color: rgb(43,195,190); width:103px;" class="text-3xl">상호명</text>
         <text class="w-1/3 text-right text-xl">{{post.shop}}</text>
       </div>
@@ -129,7 +156,7 @@
       </div>
       {% if login == False %}
       {% elif (username == post.register_user) or (username in post.user_list)  %}
-      <div class="my-3 flex justify-center block items-center my-4 w-full relative">
+      <div class="my-3 flex justify-center block items-center my-4 w-full relative mb-16">
         <text style="text-align: right; color: rgb(43,195,190);  width:103px;" class="text-3xl">링크</text>
         <text class="w-1/3 text-right text-xl truncate ml-8" id="open_url">{{post.open_url}}</text>
         <button class="absolute right-16 border-gray-800 border-2 p-1 rounded-lg" onclick="onClickCopy()">
