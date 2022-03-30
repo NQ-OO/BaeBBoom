@@ -12,8 +12,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
   <!-- TAIL WIND -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -71,9 +72,34 @@
     //   })
 
     // }
+    function onClickTogether(e) {
+      e.stopPropagation();
+      // console.log(event.path[1].id);
+      // console.log(this);
+      let user_id = '{{ username }}';
+      let objectId = event.path[1].id;
 
-    function onClickSpec() {
-      console.log("let it go");
+      $.ajax({
+        type: "POST",
+        url: "/together",
+        data: { user_id, objectId }, // 데이터 주는방법
+        success: function (response) { // 성공하면
+          if (response["result"] == "success") {
+            // alert(response["msg"]);
+            // 3. 성공 시 페이지 새로고침
+            // alert("등록완료!");
+            // window.location.href = './';
+            // alert(response['open_url']);
+            if (window.confirm('확인 누르면 오픈채팅방으로 이동합니다!')) {
+              window.location.href = response['open_url'];
+            } else {
+              location.reload();
+            }
+          } else {
+            alert("server ERROR!")
+          }
+        }
+      })
     }
     function onClickLoginBtn() {
       window.location.href = './signin';
@@ -93,37 +119,41 @@
   top: 0px; background-color: rgb(43,195,190);">
 
     <div>
-      <text style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800; letter-spacing: 10px;">배뿜</text>
+      <a href='/'><text
+          style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800; letter-spacing: 10px;">배뿜</text></a>
       <text style="font-size:20px; color:white;">배달비를 뿜!하자</text>
       {%if login == True %}
-        {{username}}님, 안녕하세요
+      {{username}}님, 안녕하세요
       {%else%}
-        로그인 해주세요
+      로그인 해주세요
       {%endif%}
 
 
     </div>
     <!-- LOGIN OR LOGOUT -->
-    
-      {% if login == True%}
-        <a href = "/logout">
-          <button style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-            LOGOUT
-          </button>
-        </a>
-      {% else %}
-        <a href = "/signin">
-          <button style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-            LOGIN
-          </button>
-        </a>
-        <a href = "/signup">
-          <button style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
-            회원가입
-          </button>
-        </a>
-      {% endif %}
-    
+
+    {% if login == True%}
+    <a href="/logout">
+      <button
+        style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+        LOGOUT
+      </button>
+    </a>
+    {% else %}
+    <a href="/signin">
+      <button
+        style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+        LOGIN
+      </button>
+    </a>
+    <a href="/signup">
+      <button
+        style="margin-right: 40px; background-color: white; outline: 0; border:0; width:150px; height: 60px; border-radius: 10px; color:rgb(43,195,190); font-size: 20px;">
+        회원가입
+      </button>
+    </a>
+    {% endif %}
+
   </div>
 
   <div class="flex flex-1 flex-col items-center">
@@ -137,17 +167,23 @@
           함께하기
         </button>
       </li> -->
+      {% if orders|length > 0 %}
       {% for post in orders %}
       {% set date = post.deadline|string %}
       <li class="bg-white my-4 w-1/2 block p-6 rounded drop-shadow-lg" id={{post._id}} onclick="onClickList(this.id)">
         {{post.shop}}
         {{date[6:8]}}:{{date[8:]}}까지 예약받음
         인원:{{post.user_list|length}}/{{post.min_num}}
-        <button onclick="onClickSpec()">
+
+        {% if username not in post.user_list %}
+        <button onclick="onClickTogether(event)" class="z-40 border-emerald-700 border-2 p-1 right-5">
           함께하기
         </button>
+        {% endif %}
+
       </li>
       {% endfor %}
+      {% endif %}
     </ul>
 
 

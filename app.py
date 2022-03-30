@@ -112,8 +112,10 @@ def home():
 
 @app.route('/register')
 def register_page():
-    return render_template('register.html')
-
+    if "user" in session :
+      return render_template('register.html', username = session.get("user")["username"])
+    else :
+      return render_template('register.html')
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -157,12 +159,14 @@ def spec(objectId):
 @app.route('/together', methods=['POST'])
 def together():
     # 1. 클라이언트에서 전달 받은 objectid 값을 변수에 넣는다.
-    id_receive = request.form['object_id_give']
-    user_receive = request.form['user_give']  # 유저 변수에 저장
+    
+    id_receive = request.form['objectId']
+    user_receive = request.form['user_id']  # 유저 변수에 저장
 
     # 2. 해당 정보 찾기
     post = db.posts.find_one({'_id': ObjectId(id_receive)})
     open_url = post['open_url']
+    print("open_url :", open_url)
 
     # 3. user_list에 현재 사용자 추가
     #new_num = post['num']+1
@@ -173,7 +177,7 @@ def together():
                         '$set': {'user_list': post['user_list']}})
 
     # 5. 링크 보내기
-    return jsonify({'result': 'success', 'open_url': open_url})
+    return jsonify({'result': 'success', 'open_url': post['open_url']})
 
 # 로그인 페이지
 
