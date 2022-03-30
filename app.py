@@ -52,7 +52,7 @@ client = MongoClient('localhost', 27017)
 db = client.dbjungle
 
 now = datetime.now()
-current_time = int(now.strftime("%H%M"))
+current = int(now.strftime("%y%m%d%H%M"))
 
 # 메인페이지
 
@@ -63,21 +63,9 @@ current_time = int(now.strftime("%H%M"))
 @app.route('/', methods=['GET'])
 def home():
     # 등록페이지
-    all_posts_list = list(db.posts.find({}).sort('deadline', 1))
-    posts_list = []
-    for posts in all_posts_list :
-        register_date = datetime.strptime(posts['date'],"%y%m%d")
-        # print(type(posts['deadline']))
-        # print(posts['deadline'])
-        # print(type(current_time))
-        # print(current_time)
-        # 0. if문 해서 시간내에 있는거만 검색하기
-        # deadline = int(posts['deadline'])
-        if (now - register_date).days == 0 :
-            # print("날짜 오늘")
-            if posts['deadline'] - current_time >= 0 :
-                # print("시간도 아직 안지남")
-                posts_list.append(posts)
+    print(current)
+
+    posts_list = list(db.posts.find({'deadline': {"$gte" : current}}).sort('deadline', 1))
 
     if "user" in session : 
         print(session)
@@ -133,20 +121,16 @@ def register_page():
 def register():
 
     # # 1. 클라이언트 데이터 받기
-    register_date = now.strftime("%y%m%d")
+    deadline_receive = int(now.strftime("%y%m%d") + request.form['realtime'])
     shop_receive = request.form['business_name']
     min_num_receive = request.form['min_per']
-
-    deadline_receive = int(request.form['realtime'])
-    print(deadline_receive)
-    # deadline_receive = request.form['realtime']
 
     delivery_cost_receive = request.form['fee']
     open_url_receive = request.form['open_link']
     user_receive = request.form['user_id']  # 유저 변수에 저장
 
 
-    post = {'date': register_date,'shop': shop_receive, 'min_num': min_num_receive, 'deadline': deadline_receive,
+    post = {'shop': shop_receive, 'min_num': min_num_receive, 'deadline': deadline_receive,
             'delivery_cost': delivery_cost_receive, 'open_url': open_url_receive, 'user_list': [user_receive]}  # user 변수 list에 저장
 
 
@@ -262,9 +246,9 @@ def logout():
   
 
 if __name__ == '__main__':
-  WTF_CSRF_SECRET_KEY="a csrf secret key"
-  csrf = CSRFProtect()
-  csrf.init_app(app)
+  # WTF_CSRF_SECRET_KEY="a csrf secret key"
+  # csrf = CSRFProtect()
+  # csrf.init_app(app)
   app.run('0.0.0.0', port=5000, debug=True)
 
 
