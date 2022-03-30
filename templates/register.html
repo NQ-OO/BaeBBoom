@@ -47,76 +47,39 @@
   <script>
     function onClickRegister(e) {
       e.preventDefault();
-      // err all hidden
-      // $("#allErr").hide();
-      // $("#perErr").hide();
-      // $("#timeErr").hide();
       let today = new Date();
       let nowHour = today.getHours();
       let nowMinute = today.getMinutes();
-      console.log(nowHour, ":", nowMinute);
       let business_name = $("#business_name").val();
       let min_per = $("#min_per").val();
       let time = $("#time").val();
-      console.log("time:", time);
       let fee = $("#fee").val();
       let open_link = $("#open_link").val();
       let user_id = '{{ username }}';
-      console.log("user_id : ", user_id);
       let [hour, minutes] = time.split(':');
-      // console.log(minutes);
-      // hour = Number(hour);
-      // minutes = Number(minutes);
-      // console.log(typeof hour);
-      // console.log(hour);
-      // console.log(typeof minutes);
-      // console.log(minutes);
-      // console.log(business_name.trim(), min_per.trim(), time.trim(), fee.trim(), open_link.trim());
-      // min_per > 1
-      // time 양식 00:00
       if (business_name.trim() == '' || min_per == '' || time.trim() == '' || fee == '' || open_link == '') {
-        // alert("모두 필수사항입니다.\n 필수사항을 모두 입력해주세요.");
-        // allerr hidden delete
         $("#allErr").show();
 
       }
       else if (min_per <= 1) {
-        // alert("인원수를 제대로 입력하라옹!!!");
-        // pererr hidden delete
         $("#perErr").show();
       }
 
       else if (hour > 23 || minutes >= 60 || minutes == undefined || hour < nowHour || (hour == nowHour && minutes < nowMinute)) {
-        // alert("시간을 제대로 입력하라옹!!!");
-        // console.log("hour :", hour, "nowHour:", nowHour);
-        // console.log("minutes :", minutes, "nowMinute:", nowMinute);
-        // timeErr hidden delete
         $("#timeErr").show();
       }
-      // console.log(business_name, min_per, time, fee, open_link);
 
-
-      // 통신
       else {
         hour = hour.toString();
         minutes = minutes.toString();
-        // hour = hour.padStart(2, '0');
         minutes = minutes.padStart(2, '0');
         let realtime = hour + minutes;
-        console.log(realtime);
-        console.log(business_name, min_per, realtime, fee, open_link, user_id);
-        // realtime = Number(realtime);
-        // console.log("realtime");
-        // console.log(realtime);
-        // console.log(typeof realtime);
         $.ajax({
           type: "POST",
           url: "/register",
-          data: { business_name, min_per, realtime, fee, open_link, user_id }, // 데이터 주는방법
-          success: function (response) { // 성공하면
+          data: { business_name, min_per, realtime, fee, open_link, user_id }, 
+          success: function (response) { 
             if (response["result"] == "success") {
-              // alert(response["msg"]);
-              // 3. 성공 시 페이지 새로고침
               alert("등록완료!");
               window.location.href = './';
             } else {
@@ -142,7 +105,7 @@
     <div>
       <a href='/'><text
           style="margin-left: 5vw; font-size: 100px; color: white; font-weight: 800; letter-spacing: 10px;">배뿜</text></a>
-      <text style="font-size:20px; color:white;">배달비를 뿜!하자</text>
+      <text style="font-size:20px; color:white;">배달비를 뿜!하다</text>
 
     </div>
     <!-- LOGIN OR LOGOUT -->
